@@ -7,16 +7,16 @@ import com.devsouzx.ecommerce_with_docker.mapper.ProductMapper;
 import com.devsouzx.ecommerce_with_docker.model.Product;
 import com.devsouzx.ecommerce_with_docker.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -68,8 +68,8 @@ public class ProductService {
         return productMapper.toDTO(product);
     }
 
-    public List<ProductListDTO> getAllProducts(){
-        return productRepository.findAllWithoutComments();
+    public Page<ProductListDTO> getAllProducts(Pageable pageable) {
+        return productRepository.findAllWithoutComments(pageable);
     }
 
     private String saveImage(MultipartFile image) throws IOException {

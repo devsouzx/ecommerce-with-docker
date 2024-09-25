@@ -1,8 +1,9 @@
 package com.devsouzx.ecommerce_with_docker.service;
 
 import com.devsouzx.ecommerce_with_docker.model.Order;
+import com.devsouzx.ecommerce_with_docker.model.User;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,24 @@ import org.springframework.stereotype.Service;
 public class EmailService {
     private final JavaMailSender mailSender;
 
+    @Value("spring.mail.username")
+    private String fromEmail;
+
     public void sendOrderConfirmation(Order order){
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("3210de6d30d855");
+        message.setFrom(fromEmail);
         message.setTo(order.getUser().getEmail());
         message.setSubject("Order confirmation");
         message.setText("Your order has been confirmed. Order ID " + order.getId());
+        mailSender.send(message);
+    }
+
+    public void sendConfirmationCode(User user){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
+        message.setTo(user.getEmail());
+        message.setSubject("Confirm your email");
+        message.setText("Please confirm your email by entering this code " + user.getConfirmationCode());
         mailSender.send(message);
     }
 }

@@ -26,8 +26,10 @@ public class User implements UserDetails {
     @Email
     private String email;
     @NotBlank
-
     private String password;
+
+    private boolean emailConfirmation;
+    private String confirmationCode;
 
     @Enumerated(EnumType.STRING)
     private Role role;
